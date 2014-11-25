@@ -1,0 +1,111 @@
+sudo apt-get install git
+sudo apt-get install gem
+gem install capistrano
+sudo apt-get install capistrano
+Capistrano v2.12.0
+gem install capifony
+cd path/to/your/project
+capifony .
+
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+
+
+
+sudo mkdir -p /var/git/alertdelta.git
+cd /var/git/alertdelta.git
+sudo git init --bare
+cd ~/alertdelta
+sudo git init
+sudo git add .
+sudo git commit -m "intitial live site commit"
+git config --global user.name "alertdelta"
+git config --global user.email vprmedia@gmail.com
+   git commit --amend --reset-author
+nano .git/config
+    [remote "hub"]
+    url = /var/git/alertdelta.git
+    fetch = +refs/heads/*:refs/remotes/hub/*
+
+sudo nano /var/git/alertdelta.git/hooks/post-update
+
+#!/bin/sh
+echo
+echo "**** Pulling changes into Live [Hub's post-update hook]"
+echo
+cd ~/alertdelat || exit
+unset GIT_DIR
+git pull hub master
+exec git-update-server-info
+
+sudo nano ~/alertdelta/.git/hooks/post-commit
+
+#!/bin/sh
+echo
+echo "**** pushing changes to Hub [Live's post-commit hook]"
+echo
+git push hub
+
+sudo chmod +x /var/git/alertdelta.git/hooks/post-update
+sudo chmod +x ~/alertdelta/.git/hooks/post-commit
+
+sudo chown -R ubuntu /var/git/
+sudo chown -R ubuntu ~/alertdelta
+
+
+cat ~/.ssh/id_rsa.pub | ssh -i /Users/michael/Documents/SERVER/AlertDelta02.pem ubuntu@ec2-54-66-141-124.ap-southeast-2.compute.amazonaws.co "cat>> .ssh/authorized_keys"
+ssh -i /Users/michael/Documents/SERVER/AlertDelta02.pem -v ubuntu@ec2-54-66-141-124.ap-southeast-2.compute.amazonaws.com
+git remote add ec2 ssh://ubuntu@ec2-54-66-141-124.ap-southeast-2.compute.amazonaws.com/home/ubuntu/alertdelta/alertdelta.git
+
+http://www.andrehonsberg.com/article/deploy-meteorjs-vhosts-ubuntu1204-mongodb-apache-proxy
+sudo kill -9 `ps ax |mup  grep node | grep meteor | awk '{print $1}'`
+
+
+show collections
+db.posts.find().sort({$natural: -1}).limit(10);
+
+
+
+  // Server authentication info
+  "servers": [
+    {
+      "host": "54.66.141.124",
+      "username": "ubuntu",
+      //"password": "password"
+      // or pem file (ssh based authentication)
+      "pem": "/home/ubuntu/alertdelta/AlertDelta02.pem"
+    }
+  ],
+
+  // Install MongoDB in the server, does not destroy local MongoDB on future setup
+  "setupMongo": true,
+
+  // WARNING: Node.js is required! Only skip if you already have Node.js installed on server.
+  "setupNode": true,
+
+  // WARNING: If nodeVersion omitted will setup 0.10.31 by default. Do not use v, only version number.
+  "nodeVersion": "0.10.31",
+
+  // Install PhantomJS in the server
+  "setupPhantom": true,
+
+  // Application name (No spaces)
+  "appName": "meteor",
+
+  // Location of app (local directory)
+  "app": "/home/ubuntu/alertdelta/Telescope",
+
+  // Configure environment
+  "env": {
+           "PORT": 80,
+    "ROOT_URL": "http://alertdelta.com",
+    "MONGO_URL": "mongodb://localhost:27017/alertdelta",
+    "MAIL_URL": "smtp://postmaster%40sandboxade9801ca3be46ac985bbe0d986ec219.mailgun.org:adj87sjhd7s@smtp.mail$
+  },
+
+  // Meteor Up checks if the app comes online just after the deployment
+  // before mup checks that, it will wait for no. of seconds configured below
+  "deployCheckWaitTime": 15
+}
+
